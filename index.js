@@ -48,6 +48,13 @@ async function run() {
       res.send(result);
     });
 
+    app.delete("/mytoy/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await carsToysCollection.deleteOne(query);
+      res.send(result);
+    });
+
     app.post("/addtoy", async (req, res) => {
       const query = req.body;
       const result = await carsToysCollection.insertOne(query);
