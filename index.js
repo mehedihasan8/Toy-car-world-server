@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 5000;
@@ -7,7 +8,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `mongodb+srv://${process.env.CAR_TOY_USER}:${process.env.CAR_TOY_PASS}@cluster0.wauv4p9.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -29,6 +29,13 @@ async function run() {
     app.get("/totalData", async (req, res) => {
       const coursor = carsToysCollection.find();
       const result = await coursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/toydetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await carsToysCollection.findOne(filter);
       res.send(result);
     });
 
