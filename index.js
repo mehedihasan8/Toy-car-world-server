@@ -39,12 +39,24 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/searchByName/:text", async (req, res) => {
+      const text = req.params.text;
+      console.log(text);
+      const filter = { toyName: { $regex: text } };
+
+      const result = await carsToysCollection.find(filter).toArray();
+      res.send(result);
+    });
+
     app.get("/mytoy", async (req, res) => {
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
       }
-      const result = await carsToysCollection.find(query).toArray();
+      const result = await carsToysCollection
+        .find(query)
+        .sort({ price: -1 })
+        .toArray();
       res.send(result);
     });
 
