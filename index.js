@@ -55,6 +55,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/mytoyCategory/:category", async (req, res) => {
+      const newCategory = req.params.category;
+      console.log(newCategory);
+      const query = { category: newCategory };
+      const result = await carsToysCollection.find(query).toArray();
+      res.send(result);
+    });
+
     app.put("/mytoy/:id", async (req, res) => {
       const id = req.params.id;
       const updateToy = req.body;
