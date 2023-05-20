@@ -27,7 +27,7 @@ async function run() {
     const carsToysCollection = client.db("carsToys").collection("cartoy");
 
     app.get("/totalData", async (req, res) => {
-      const coursor = carsToysCollection.find();
+      const coursor = carsToysCollection.find().limit(20);
       const result = await coursor.toArray();
       res.send(result);
     });
@@ -41,7 +41,7 @@ async function run() {
 
     app.get("/searchByName/:text", async (req, res) => {
       const text = req.params.text;
-      console.log(text);
+
       const filter = { toyName: { $regex: text } };
 
       const result = await carsToysCollection.find(filter).toArray();
@@ -53,9 +53,19 @@ async function run() {
       if (req.query?.email) {
         query = { email: req.query.email };
       }
+      const result = await carsToysCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.get("/sortByPrice/:sortType", async (req, res) => {
+      const sortType = req.params.sortType;
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
       const result = await carsToysCollection
         .find(query)
-        .sort({ price: -1 })
+        .sort({ price: sortType == "ascending" ? 1 : -1 })
         .toArray();
       res.send(result);
     });
