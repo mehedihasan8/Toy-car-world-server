@@ -22,7 +22,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const carsToysCollection = client.db("carsToys").collection("cartoy");
 
@@ -87,6 +87,7 @@ async function run() {
 
     app.put("/mytoy/:id", async (req, res) => {
       const id = req.params.id;
+      console.log(id);
       const updateToy = req.body;
       const filter = { _id: new ObjectId(id) };
       const updateDoc = {
