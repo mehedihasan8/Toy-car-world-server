@@ -27,7 +27,10 @@ async function run() {
     const carsToysCollection = client.db("carsToys").collection("cartoy");
 
     app.get("/totalData", async (req, res) => {
-      const coursor = carsToysCollection.find().limit(20);
+      const limit = parseInt(req.query.limit);
+      console.log(limit);
+
+      const coursor = carsToysCollection.find().limit(limit);
       const result = await coursor.toArray();
       res.send(result);
     });
@@ -57,15 +60,16 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/sortByPrice/:sortType", async (req, res) => {
+    app.get("/mytoys/:sortType", async (req, res) => {
       const sortType = req.params.sortType;
+      // console.log(sortType);
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
       }
       const result = await carsToysCollection
         .find(query)
-        .sort({ price: sortType == "ascending" ? 1 : -1 })
+        .sort({ price: sortType === "ascending" ? 1 : -1 })
         .toArray();
       res.send(result);
     });
