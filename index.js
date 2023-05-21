@@ -83,7 +83,7 @@ async function run() {
 
     app.get("/mytoyCategory/:category", async (req, res) => {
       const newCategory = req.params.category;
-      console.log(newCategory);
+
       const query = { category: newCategory };
       const result = await carsToysCollection.find(query).toArray();
       res.send(result);
